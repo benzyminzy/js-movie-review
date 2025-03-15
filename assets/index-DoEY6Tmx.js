@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-DPvXN2Ny.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-BUwr-V7t.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -127,16 +127,22 @@ class AbstractParamsManager {
   }
   getParam(key) {
     const url = new URL(window.location.href);
-    return url.searchParams.get(this.getNamespacedKey(key));
+    const hashQuery = url.hash.includes("?") ? url.hash.split("?")[1] : "";
+    const hashParams = new URLSearchParams(hashQuery);
+    const value = hashParams.get(this.getNamespacedKey(key));
+    return value ? decodeURIComponent(value) : null;
   }
   setParams(params) {
     const url = new URL(window.location.href);
+    const [hashPath, hashQuery] = url.hash.split("?");
+    const hashParams = new URLSearchParams(hashQuery || "");
     Object.entries(params).forEach(([key, value]) => {
       const namespacedKey = this.getNamespacedKey(key);
       if (value) {
-        url.searchParams.set(namespacedKey, value);
+        hashParams.set(namespacedKey, value);
       }
     });
+    url.hash = hashPath + "?" + hashParams.toString();
     window.history.replaceState({}, "", url);
   }
 }
@@ -245,41 +251,37 @@ const __vitePreload = function preload(baseModule, deps, importerUrl) {
   });
 };
 const ROUTES = {
-  "/": {
-    path: "/",
+  "": {
+    path: "",
     component: async () => {
       const module = await __vitePreload(() => import("./index-ChDeRbRW.js"), true ? __vite__mapDeps([0,1]) : void 0);
       return await module.popularMovies();
     }
   },
-  "/search": {
-    path: "/search",
+  search: {
+    path: "search",
     component: async () => {
-      const module = await __vitePreload(() => import("./index-DPvXN2Ny.js"), true ? __vite__mapDeps([2,1]) : void 0);
+      const module = await __vitePreload(() => import("./index-BUwr-V7t.js"), true ? __vite__mapDeps([2,1]) : void 0);
       return await module.searchResults();
     }
   }
 };
 const matchRoute = async () => {
-  console.log(void 0);
-  const baseUrl = "";
-  const pathname = window.location.pathname.replace(baseUrl, "");
+  const hash = window.location.hash.slice(1);
+  const pathname = hash.split("?")[0];
   const route = Object.keys(ROUTES).find((route2) => route2 === pathname);
-  return route ? await ROUTES[route].component() : await ROUTES["/"].component();
+  return route ? await ROUTES[route].component() : await ROUTES[""].component();
 };
-console.log(void 0);
 const navigate = async (path) => {
-  console.log(void 0);
-  const baseUrl = "";
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  window.history.pushState(null, "", `${baseUrl}${normalizedPath}`);
+  const normalizedPath = path.startsWith("#") ? path.slice(1) : path;
+  window.location.hash = normalizedPath;
   return await matchRoute();
 };
 addEventListener("load", async () => {
   const app = document.querySelector("#app");
   const layout = createLayout({
     onSearch: async () => {
-      const page2 = await navigate("/search");
+      const page2 = await navigate("search");
       updateLayoutContent(page2);
     }
   });
