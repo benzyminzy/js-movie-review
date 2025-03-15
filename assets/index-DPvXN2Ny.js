@@ -1,5 +1,5 @@
 import { s as safeFetchWithPagination, c as createMovieListSection, u as updateMovieList, h as hiddenMovieListLoadButton } from "./lib-DKrVVXbx.js";
-import { s as searchParamsManager } from "./index-BowFpGSQ.js";
+import { s as searchParamsManager } from "./index-BI7oChsV.js";
 const fetchSearchMovies = async ({ query = "" }) => {
   return await safeFetchWithPagination({
     url: `/search/movie?language=ko-KO&query=${query}`
