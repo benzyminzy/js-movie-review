@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-COPtE4me.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-Br2g84HS.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -137,7 +137,7 @@ class AbstractParamsManager {
         url.searchParams.set(namespacedKey, value);
       }
     });
-    window.history.pushState({}, "", url);
+    window.history.replaceState({}, "", url);
   }
 }
 class SearchParamsManager extends AbstractParamsManager {
@@ -255,7 +255,7 @@ const ROUTES = {
   "/search": {
     path: "/search",
     component: async () => {
-      const module = await __vitePreload(() => import("./index-COPtE4me.js"), true ? __vite__mapDeps([2,1]) : void 0);
+      const module = await __vitePreload(() => import("./index-Br2g84HS.js"), true ? __vite__mapDeps([2,1]) : void 0);
       return await module.searchResults();
     }
   }
@@ -281,6 +281,10 @@ addEventListener("load", async () => {
     }
   });
   app.append(...layout);
+  const page = await matchRoute();
+  updateLayoutContent(page);
+});
+window.addEventListener("popstate", async () => {
   const page = await matchRoute();
   updateLayoutContent(page);
 });
