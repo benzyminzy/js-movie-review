@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-CKO2BRnm.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/index-ChDeRbRW.js","assets/lib-DKrVVXbx.js","assets/index-DjFODc25.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -255,7 +255,7 @@ const ROUTES = {
   "/search": {
     path: "/search",
     component: async () => {
-      const module = await __vitePreload(() => import("./index-CKO2BRnm.js"), true ? __vite__mapDeps([2,1]) : void 0);
+      const module = await __vitePreload(() => import("./index-DjFODc25.js"), true ? __vite__mapDeps([2,1]) : void 0);
       return await module.searchResults();
     }
   }
@@ -266,7 +266,8 @@ const matchRoute = async () => {
   return route ? await ROUTES[route].component() : await ROUTES["/"].component();
 };
 const navigate = async (path) => {
-  window.history.pushState(null, "", path);
+  const baseUrl = void 0;
+  window.history.pushState(null, "", `${baseUrl}${path}`);
   return await matchRoute();
 };
 addEventListener("load", async () => {
