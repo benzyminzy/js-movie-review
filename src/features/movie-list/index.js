@@ -1,3 +1,5 @@
+import { createIntersectionObserver } from "src/shared/util/intersect-observer.js";
+
 import {
   createMovieListItem,
   createMovieList,
@@ -40,18 +42,35 @@ const onClickLoadButton = async (onLoadMore) => {
   }
 };
 
-export const createMovieListSection = ({ movies = [], onLoadMore }) => {
-  const container = createMovieContainer();
-  const layout = createMovieLayout();
-  const movieList = createMovieList(movies);
+const createInfiniteScroll = (root, onIntersect) => {
+  const observer = createIntersectionObserver({
+    onIntersect: () => onIntersect(),
+  });
 
-  const loadButton = createMovieListLoadButton(() =>
-    onClickLoadButton(onLoadMore)
-  );
+  observer.observe(root);
+};
+
+export const createMovieListSection = ({
+  movies = [],
+  showLoadButton = true,
+  onLoadMore,
+  title = "",
+  showEmptyMovieList = false,
+  emptyMovieListMessage = "검색 결과가 없습니다 🥲",
+}) => {
+  const container = createMovieContainer();
+  const layout = createMovieLayout(title);
+
+  const movieList = createMovieList(movies);
+  const emptyMovieList = createEmptyMovieList(emptyMovieListMessage);
+
+  const loadButton = showLoadButton
+    ? createMovieListLoadButton(() => onClickLoadButton(onLoadMore))
+    : null;
 
   container.appendChild(layout);
-  layout.appendChild(movieList);
-  layout.appendChild(loadButton);
+  layout.appendChild(showEmptyMovieList ? emptyMovieList : movieList);
+  if (loadButton) layout.appendChild(loadButton);
 
   return container;
 };
